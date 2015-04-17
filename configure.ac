@@ -35,10 +35,7 @@ AC_ARG_WITH(gstversion,
 	[GST_MAJORMINOR=$withval],[GST_MAJORMINOR=0.10])
 
 PKG_CHECK_MODULES(BASE, [freetype2 fribidi gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto])
-else
-PKG_CHECK_MODULES(BASE, [freetype2 fribidi libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto])
-fi
-
+PKG_CHECK_MODULES(LIBDDVD, libdreamdvd, HAVE_LIBDDVD="yes", HAVE_LIBDDVD="no")
 AM_CONDITIONAL(HAVE_LIBDDVD, test "$HAVE_LIBDDVD" = "yes")
 
 AC_CHECK_LIB([dl], [dlopen], [LIBDL_LIBS="-ldl"], [AC_MSG_ERROR([Could not find libdl])])
@@ -108,15 +105,6 @@ if test x"$withcolorlcd" != xno ; then
 fi
 AM_CONDITIONAL(HAVE_COLORLCD, test x"$withcolorlcd" != xno)
 
-AC_ARG_WITH(graphlcd,
-	AC_HELP_STRING([--with-graphlcd], [use GraphLCD color display, yes or no]),
-	[[withgraphlcd=$withval]],
-	[[withgraphlcd=no]]
-)
-if test x"$withgraphlcd" != xno ; then
-	AC_DEFINE(HAVE_GRAPHLCD, 1,[Define when using a GraphLCD color display device])
-fi
-AM_CONDITIONAL(HAVE_GRAPHLCD, test x"$withgraphlcd" != xno)
 
 AC_ARG_WITH(oldpvr,
 	AC_HELP_STRING([--with-oldpvr], [use /dev/misc/pvr instead of /dev/dvb/adapterX/dvrX, yes or no]),
@@ -206,7 +194,6 @@ data/countries/Makefile
 data/extensions/Makefile
 data/keymaps/Makefile
 data/hw_info/Makefile
-data/rc_models/Makefile
 data/skin_default/Makefile
 data/skin_default/menu/Makefile
 data/skin_default/icons/Makefile
